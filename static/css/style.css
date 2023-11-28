@@ -1,0 +1,60 @@
+/* CSS for chatbox container */
+.container {
+  margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* CSS for chatbox */
+.chatbox {
+  border: 1px solid #ccc;
+  padding: 10px;
+  height: 300px;
+  overflow-y: scroll;
+}
+
+/* CSS for chat messages */
+#output {
+  margin-bottom: 10px;
+}
+
+/* CSS for chat input form */
+#chat-form {
+  display: flex;
+  margin-top: 10px;
+}
+
+#chat-form input[type='text'] {
+  flex-grow: 1;
+  padding: 5px;
+}
+
+#chat-form button[type='submit'] {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+}
+
+/* CSS for voice controls */
+.voice-controls {
+  margin-top: 10px;
+}
+
+.voice-controls button {
+  padding: 5px 10px;
+  margin-right: 5px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+}
+
+.voice-controls button:last-child {
+  margin-right: 0;
+}
+
+#eva {
+  width: 28rem;
+  height: 28rem;
+}

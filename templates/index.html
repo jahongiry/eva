@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chatbot</title>
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script
+      type="text/javascript"
+      src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+    ></script>
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({ pageLanguage: 'en' }, 'input');
+      }
+    </script> -->
+    <script>
+      $(document).ready(function () {
+        // Speech Recognition
+        var recognition = new webkitSpeechRecognition();
+        recognition.continuous = true;
+        recognition.lang = 'eng';
+        recognition.onresult = function (event) {
+          var inputText = event.results[event.results.length - 1][0].transcript;
+          $('#input').val(inputText);
+          console.log(inputText);
+        };
+
+        // Speech Synthesis
+        var synthesis = window.speechSynthesis;
+
+        function speak(text) {
+          var utterance = new SpeechSynthesisUtterance(text);
+          synthesis.speak(utterance);
+        }
+
+        $('#input-voice').click(function () {
+          recognition.start();
+          $('#eva').attr('src', 'static/img/eva2.png');
+        });
+
+        $('#output-voice').click(function () {
+          var outputText = $('#output').text();
+          speak(outputText);
+          $('#eva').attr('src', 'static/img/eva3.png');
+        });
+
+        $('#chat-form').submit(function (event) {
+          event.preventDefault();
+          var inputText = $('#input').val();
+          console.log(inputText);
+
+          if (inputText.trim() !== '') {
+            $.ajax({
+              url: '/chatbot',
+              type: 'POST',
+              data: { input_text: inputText },
+              success: function (response) {
+                var outputText = response.response;
+                $('#output').append('<p>' + inputText + '</p>');
+                $('#output').append('<p>' + outputText + '</p>');
+                $('#input').val('');
+                speak(outputText);
+                $('#eva').attr('src', 'static/img/eva3.png');
+                $('#eva')
+                  .delay(8000)
+                  .queue(function (next) {
+                    $('#eva').attr('src', 'static/img/eva1.png');
+                    next();
+                  });
+              },
+              error: function () {
+                alert('An error occurred.');
+              },
+            });
+          }
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="chatbox">
+        <div id="output"></div>
+        <form id="chat-form">
+          <input
+            type="text"
+            id="input"
+            placeholder="Enter your message"
+            autofocus
+          />
+          <button type="submit">Send</button>
+        </form>
+      </div>
+      <div>
+        <img id="eva" src="static/img/eva1.png" alt="robot" />
+        <div class="voice-controls">
+          <button id="input-voice">Speak Input</button>
+          <button id="output-voice">Speak Output</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
